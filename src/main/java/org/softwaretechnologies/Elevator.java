@@ -79,12 +79,10 @@ public final class Elevator {
        // TODO: реализуйте вышеуказанную функцию
         while(getCurrentFloor() != floor){
             System.out.println("Текущий этаж: " + getCurrentFloor());
-            if(getCurrentFloor() > floor){
+            if(getCurrentFloor() > floor)
                 goDown();
-            }
-            else {
+            else
                 goUp();
-            }
         }
         System.out.println("Вы достигли указанного этажа: " + getCurrentFloor());
     }
