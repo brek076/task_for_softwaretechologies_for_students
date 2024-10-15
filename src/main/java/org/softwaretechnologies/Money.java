@@ -27,7 +27,25 @@ public class Money {
     @Override
     public boolean equals(Object o) {
         // TODO: реализуйте вышеуказанную функцию
+        if (!(o instanceof Money))
+            return false;
 
+        Money money_2 = (Money) o;
+
+
+//        BigDecimal scale1 =  this.getAmount().setScale(4, RoundingMode.HALF_UP);
+//        BigDecimal scale2 = money_2.getAmount().setScale(4, RoundingMode.HALF_UP);
+
+
+        if(this.getType() == money_2.getType() &&
+                money_2.getAmount() != null &&
+                this.getAmount() != null &&
+//                scale1 == scale2
+        this.getAmount().setScale(4, RoundingMode.HALF_UP).equals(money_2.getAmount().setScale(4, RoundingMode.HALF_UP))
+
+                ){
+            return  true;
+        }
         return false;
     }
 
@@ -61,7 +79,7 @@ public class Money {
      * Тип_валюты: USD, EURO, RUB или KRONA
      * количество.XXXX - округленный amount до 4х знаков.
      * Округление по правилу: если >= 5, то в большую сторону, интаче - в меньшую
-     * BigDecimal scale = amount.setScale(4, RoundingMode.HALF_UP);
+     * BigDecimal scale = amount.setScale(4, Round.ingMode.HALF_UP);
      * <p>
      * Если тип валюты null, то вернуть:
      * null: количество.XXXX

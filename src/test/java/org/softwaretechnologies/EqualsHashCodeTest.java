@@ -27,6 +27,8 @@ public class EqualsHashCodeTest {
         @Override
         public boolean equals(Object obj) {
             return super.equals(obj);
+            // при попытке сравнить хэшкоды объекта В, используя ф-ю hashCode ниже, каждый раз результат
+            // (практически) всегда будет true
         }
 
         @Override
@@ -41,7 +43,7 @@ public class EqualsHashCodeTest {
 
         @Override
         public boolean equals(Object o) {
-            return a == ((C) o).a;
+            return a == ((C) o).a;// Преобразование(представление) может не пройти
         }
 
         @Override
@@ -56,7 +58,7 @@ public class EqualsHashCodeTest {
         @Override
         public boolean equals(Object obj) {
             if(obj == null) return false;
-            return obj instanceof D;
+            return obj instanceof D; //
         }
 
         @Override
@@ -103,11 +105,11 @@ public class EqualsHashCodeTest {
 
         // TODO: Встатьте нужные выражения assertTrue или assertFalse для переменных a b c d e чтобы тест проходил
         // ↓↓↓↓ КОД ДЛЯ ЗАМЕНЫ ↓↓↓↓
-        assertTrue(e);
-        assertTrue(b);
-        assertTrue(c);
+        assertTrue(a);
+        assertFalse(b);
+        assertFalse(c);
         assertFalse(d);
-        assertFalse(e);
+        assertTrue(e);
         // ↑↑↑↑ КОД ДЛЯ ЗАМЕНЫ ↑↑↑↑
 
     }
