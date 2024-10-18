@@ -23,8 +23,7 @@ public class Company {
      */
     public void addEmployee(String name, int baseSalary, EmployeeType type) {
         // TODO: реализуйте вышеуказанную функцию
-        //test
-
+        employeeList.add(EmployeeFactory.createEmployee(name, baseSalary, type));
     }
 
     /**
@@ -34,8 +33,11 @@ public class Company {
      */
     public int getMonthSalary(int month) {
         // TODO: реализуйте вышеуказанную функцию
-
-        return 0;
+        int sum = 0;
+        for(Employee employee: employeeList){
+            sum += employee.getMonthSalary(month);
+        }
+        return sum;
     }
 
     public String getName() {
