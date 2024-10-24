@@ -3,6 +3,7 @@ package org.softwaretechnologies;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Random;
+import java.util.Objects;
 
 import static java.lang.Integer.MAX_VALUE;
 
@@ -27,26 +28,25 @@ public class Money {
     @Override
     public boolean equals(Object o) {
         // TODO: реализуйте вышеуказанную функцию
-        if (!(o instanceof Money))
+        if (this == o) return true; // Проверка на идентичность
+        if (!(o instanceof Money)) // Проверка на класс
             return false;
 
         Money money_2 = (Money) o;
 
+        if(money_2.type != this.type) // Проверка различие типов
+            return false;
 
-//        BigDecimal scale1 =  this.getAmount().setScale(4, RoundingMode.HALF_UP);
-//        BigDecimal scale2 = money_2.getAmount().setScale(4, RoundingMode.HALF_UP);
+        if(money_2.amount == null && this.amount == null) // Проверка на null у двух объектов сразу
+            return true;
 
+        if (money_2.amount == null || this.amount == null) // Если один из amount = null, то не false
+            return false;
 
-        if(this.getType() == money_2.getType() &&
-                money_2.getAmount() != null &&
-                this.getAmount() != null &&
-//                scale1 == scale2
-        this.getAmount().setScale(4, RoundingMode.HALF_UP).equals(money_2.getAmount().setScale(4, RoundingMode.HALF_UP))
+        BigDecimal scale1 = this.getAmount().setScale(4, RoundingMode.HALF_UP);
+        BigDecimal scale2 = money_2.getAmount().setScale(4, RoundingMode.HALF_UP);
 
-                ){
-            return  true;
-        }
-        return false;
+        return scale1.equals(scale2);
     }
 
     /**
@@ -67,10 +67,27 @@ public class Money {
     @Override
     public int hashCode() {
         // TODO: реализуйте вышеуказанную функцию
+        if (this.amount == null) return 10000;
 
+        BigDecimal money = this.amount.setScale(4, RoundingMode.HALF_UP);
+        money = money.multiply(BigDecimal.valueOf(10_000));
 
-        Random random = new Random();
-        return random.nextInt();
+        if (this.type == null) {
+            money = money.add(BigDecimal.valueOf(5));
+        }
+        else {
+            money = switch (this.type) {
+                case RUB -> money.add(BigDecimal.valueOf(3));
+                case USD -> money.add(BigDecimal.valueOf(1));
+                case EURO -> money.add(BigDecimal.valueOf(2));
+                case KRONA -> money.add(BigDecimal.valueOf(4));
+            };
+        }
+
+        if (money.compareTo(BigDecimal.valueOf(MAX_VALUE - 5)) >= 0) // Проверка на выход за MAX_VALUE
+            return MAX_VALUE;
+
+        return money.intValue();
     }
 
     /**
@@ -93,8 +110,15 @@ public class Money {
     @Override
     public String toString() {
         // TODO: реализуйте вышеуказанную функцию
-        String str = type.toString()+": "+amount.setScale(4, RoundingMode.HALF_UP).toString();
-        return str;
+        String typeString = "null";
+        String num = "null";
+        if (this.amount != null)
+            num = this.amount.setScale(4, RoundingMode.HALF_UP).toString();
+
+        if (this.type != null)
+            typeString = this.type.toString();
+
+        return typeString + ": " + num;
     }
 
     public BigDecimal getAmount() {
@@ -106,10 +130,14 @@ public class Money {
     }
 
     public static void main(String[] args) {
-        Money money = new Money(MoneyType.EURO, BigDecimal.valueOf(10.00012));
+        Money money4 = new Money(MoneyType.RUB, null);
+        Money money = new Money(MoneyType.RUB, null);
         Money money1 = new Money(MoneyType.USD, BigDecimal.valueOf(10.5000));
-        System.out.println(money1.toString());
-        System.out.println(money1.hashCode());
-        System.out.println(money.equals(money1));
+        Money money2 = new Money(MoneyType.USD, BigDecimal.valueOf(10.5000));
+//        System.out.println(money.toString());
+//        System.out.println(money.hashCode());
+//        System.out.println(money1.toString());
+//        System.out.println(money1.hashCode());
+        System.out.println(money.equals(money4));
     }
 }
